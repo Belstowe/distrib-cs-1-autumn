@@ -7,8 +7,14 @@ import (
 )
 
 func NFDH(records []tasks.Task, n int) ([][]tasks.Task, error) {
-	if records[0].R > n {
-		return nil, fmt.Errorf("only having %d processes, while the biggest task requires %d processes", n, records[0].R)
+	oversize := make([]tasks.Task, 0)
+	for _, record := range records {
+		if record.R > n {
+			oversize = append(oversize, record)
+		}
+	}
+	if len(oversize) != 0 {
+		return nil, fmt.Errorf("only having %d processes, while tasks %v require more", n, oversize)
 	}
 
 	tasksLength := len(records)
