@@ -46,7 +46,7 @@ func main() {
 func flagParse() (string, int, int, bool) {
 	filepath := flag.String("f", "", "path to file with tasks (.csv format, split with spaces, machines & time columns)")
 	nfdhFlag := flag.Bool("nfdh", false, "use NFDH (Next Fit Decreasing Height) algorithm")
-	ffdhFlag := flag.Bool("ffdh", false, "use FFDH (First First Decreasing Height) algorithm")
+	ffdhFlag := flag.Bool("ffdh", false, "use FFDH (First Fit Decreasing Height) algorithm")
 	rn := flag.Int("n", 0, "num of elementary machines")
 	prettyPrint := flag.Bool("p", false, "pretty print algorithm result")
 
@@ -73,7 +73,7 @@ func flagParse() (string, int, int, bool) {
 }
 
 func readRecords(filepath string) []tasks.Task {
-	f := assert(os.Open("test_tasks.csv"))
+	f := assert(os.Open(filepath))
 
 	r := csv.NewReader(f)
 	r.Comma = ' '
