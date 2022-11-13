@@ -22,25 +22,33 @@ const (
 )
 
 func main() {
-	filepath, algo, rn := flagParse()
+	filepath, algo, rn, prettyPrint := flagParse()
 	records := readRecords(filepath)
 	records = sortRecords(records)
+
+	jsonFormat := json.Marshal
+	if prettyPrint {
+		jsonFormat = func(v any) ([]byte, error) {
+			return json.MarshalIndent(v, "", "  ")
+		}
+	}
 
 	switch algo {
 	case None:
 		fmt.Println(records)
 	case NFDH:
-		fmt.Println(string(assert(json.MarshalIndent(outputAlgoEfficiency(records, rn, dsp.NFDH), "", "    "))))
+		fmt.Println(string(assert(jsonFormat(outputAlgoEfficiency(records, rn, dsp.NFDH)))))
 	case FFDH:
-		fmt.Println(string(assert(json.MarshalIndent(outputAlgoEfficiency(records, rn, dsp.FFDH), "", "    "))))
+		fmt.Println(string(assert(jsonFormat(outputAlgoEfficiency(records, rn, dsp.FFDH)))))
 	}
 }
 
-func flagParse() (string, int, int) {
+func flagParse() (string, int, int, bool) {
 	filepath := flag.String("f", "", "path to file with tasks (.csv format, split with spaces, machines & time columns)")
 	nfdhFlag := flag.Bool("nfdh", false, "use NFDH (Next Fit Decreasing Height) algorithm")
 	ffdhFlag := flag.Bool("ffdh", false, "use FFDH (First First Decreasing Height) algorithm")
 	rn := flag.Int("n", 0, "num of elementary machines")
+	prettyPrint := flag.Bool("p", false, "pretty print algorithm result")
 
 	flag.Parse()
 
@@ -61,7 +69,7 @@ func flagParse() (string, int, int) {
 		invalidUsage("num of elementary machines either not set or is not positive")
 	}
 
-	return *filepath, algo, *rn
+	return *filepath, algo, *rn, *prettyPrint
 }
 
 func readRecords(filepath string) []tasks.Task {
