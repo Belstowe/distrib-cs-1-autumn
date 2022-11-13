@@ -10,18 +10,16 @@ func TotalTime(taskLevels [][]tasks.Task) int {
 	return tt
 }
 
-func TimeBound(taskLevels [][]tasks.Task) float64 {
+func TimeBound(taskLevels [][]tasks.Task, n int) float64 {
 	tavg := 0
-	taskNum := 0
 	for _, taskLevel := range taskLevels {
 		for _, task := range taskLevel {
 			tavg += task.T * task.R
-			taskNum++
 		}
 	}
-	return float64(tavg) / float64(taskNum)
+	return float64(tavg) / float64(n)
 }
 
-func FnDeviation(taskLevels [][]tasks.Task) float64 {
-	return (float64(TotalTime(taskLevels)) - TimeBound(taskLevels)) / TimeBound(taskLevels)
+func FnDeviation(taskLevels [][]tasks.Task, n int) float64 {
+	return (float64(TotalTime(taskLevels)) - TimeBound(taskLevels, n)) / TimeBound(taskLevels, n)
 }

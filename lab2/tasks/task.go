@@ -1,6 +1,6 @@
 package tasks
 
 type Task struct {
-	R int
-	T int
+	R int `json:"Processes"`
+	T int `json:"Time"`
 }

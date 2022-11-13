@@ -2,13 +2,16 @@ package main
 
 import (
 	"encoding/csv"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"log"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/Belstowe/distrib-pc/lab2/dsp"
+	"github.com/Belstowe/distrib-pc/lab2/output"
 	"github.com/Belstowe/distrib-pc/lab2/tasks"
 )
 
@@ -27,23 +30,10 @@ func main() {
 	case None:
 		fmt.Println(records)
 	case NFDH:
-		fmt.Println(assert(dsp.NFDH(records, rn)))
+		fmt.Println(string(assert(json.MarshalIndent(outputAlgoEfficiency(records, rn, dsp.NFDH), "", "    "))))
 	case FFDH:
-		fmt.Println(assert(dsp.FFDH(records, rn)))
+		fmt.Println(string(assert(json.MarshalIndent(outputAlgoEfficiency(records, rn, dsp.FFDH), "", "    "))))
 	}
-}
-
-func assert[T any](res T, err error) T {
-	if err != nil {
-		log.Fatalln(err.Error())
-	}
-	return res
-}
-
-func invalidUsage(format string, v ...any) {
-	log.Printf(format, v...)
-	flag.Usage()
-	os.Exit(1)
 }
 
 func flagParse() (string, int, int) {
@@ -116,4 +106,28 @@ func sortRecords(records []tasks.Task) []tasks.Task {
 		sortedRecords = append(sortedRecords, recordBuckets[i]...)
 	}
 	return sortedRecords
+}
+
+func outputAlgoEfficiency(records []tasks.Task, rn int, algo func([]tasks.Task, int) ([][]tasks.Task, error)) output.AlgoEfficiency {
+	start := time.Now()
+	taskLevels := assert(algo(records, rn))
+	return output.AlgoEfficiency{
+		PerformanceTime:   float64(time.Since(start).Microseconds()) / 1_000_000,
+		ScheduleTotalTime: dsp.TotalTime(taskLevels),
+		ScheduleDeviation: dsp.FnDeviation(taskLevels, rn),
+		Schedule:          taskLevels,
+	}
+}
+
+func assert[T any](res T, err error) T {
+	if err != nil {
+		log.Fatalln(err.Error())
+	}
+	return res
+}
+
+func invalidUsage(format string, v ...any) {
+	log.Printf(format, v...)
+	flag.Usage()
+	os.Exit(1)
 }
