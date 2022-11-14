@@ -1,4 +1,3 @@
-import io
 import json
 from os import path
 import random
@@ -33,7 +32,7 @@ def main(n: int):
                 print(str(p.stderr))
                 break
             algo_ef = json.loads(p.stdout)
-            print(f'{algo[0]} {m} {algo_ef["PerformanceTime"]:.6f} {algo_ef["ScheduleTotalTime"]} {algo_ef["ScheduleDeviation"]:.6f}')
+            print(f'{algo[0]} {m} {n} {algo_ef["PerformanceTime"]:.6f} {algo_ef["ScheduleTotalTime"]} {algo_ef["ScheduleDeviation"]:.6f}')
 
 
 if __name__ == '__main__':
@@ -42,6 +41,6 @@ if __name__ == '__main__':
     else:
         if not path.exists('main'):
             subprocess.run(["go", "build", "main.go"])
-        print(f'# Algorithm Tasks PerformanceTime ScheduleTotalTime ScheduleDeviation')
+        print(f'# Algorithm Tasks Rank PerformanceTime ScheduleTotalTime ScheduleDeviation')
         for n in sys.argv[1:]:
             main(int(n))
