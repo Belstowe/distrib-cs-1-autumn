@@ -41,7 +41,8 @@ def filter_rows(records: list[tuple[any, ...]], n: int, i: int) -> dict[str, lis
 
 
 def build_graph(ax: plt.Axes, d: dict[str, list[tuple[int, any]]], desc: str):
-    ax.set_xlabel(desc)
+    ax.set_title(desc)
+    ax.set_xlabel('Tasks')
     for algo, records in d.items():
         x, y = list(record[0] for record in records), list(record[1] for record in records)
         ax.plot(x, y, label=algo)
@@ -50,8 +51,8 @@ def build_graph(ax: plt.Axes, d: dict[str, list[tuple[int, any]]], desc: str):
 
 def main(n: int):
     records = read_file('bench.csv')
-    fig, axs = plt.subplots(len(desc_map), 1)
-    fig.set_label(header_str)
+    fig, axs = plt.subplots(len(desc_map), 1, figsize=(6, 8))
+    fig.suptitle(header_str)
     for i in range(len(desc_map)):
         d = filter_rows(records, n, desc_map[i][0])
         build_graph(axs[i], d, desc_map[i][1])
