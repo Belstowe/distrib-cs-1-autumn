@@ -1,4 +1,5 @@
 import csv
+import sys
 import matplotlib.pyplot as plt
 
 algo_list = [
@@ -47,16 +48,20 @@ def build_graph(ax: plt.Axes, d: dict[str, list[tuple[int, any]]], desc: str):
     ax.legend()
 
 
-def main():
+def main(n: int):
     records = read_file('bench.csv')
     fig, axs = plt.subplots(len(desc_map), 1)
     fig.set_label(header_str)
     for i in range(len(desc_map)):
-        d = filter_rows(records, 1024, desc_map[i][0])
+        d = filter_rows(records, n, desc_map[i][0])
         build_graph(axs[i], d, desc_map[i][1])
     fig.tight_layout()
-    plt.savefig('graph/tmp.png')
+    plt.savefig(f'graph/tmp_{n}.png')
 
 
 if __name__ == '__main__':
-    main()
+    if len(sys.argv) < 2: 
+        print(f'usage: {sys.argv[0]} {{n...}}', file=sys.stderr)
+    else:
+        for n in sys.argv[1:]:
+            main(int(n))
