@@ -1,10 +1,4 @@
-*
-
-!.gitignore
-!.gitkeep
 !*.cpp
 !*.sh
 !*.py
 !Makefile
-
-!*/
