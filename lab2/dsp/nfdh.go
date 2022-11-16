@@ -3,7 +3,7 @@ package dsp
 import (
 	"fmt"
 
-	"github.com/Belstowe/distrib-pc/lab2/tasks"
+	"github.com/Belstowe/distrib-cs-1-autumn/lab2/tasks"
 )
 
 func NFDH(records []tasks.Task, n int) ([][]tasks.Task, error) {
