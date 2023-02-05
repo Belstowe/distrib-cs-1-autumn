@@ -8,3 +8,4 @@
 
 1. [Задание](./docs/dcsft-lab1.pdf), [код](./lab1/)
 2. [Задание](./docs/dcsft-lab2.pdf), [код](./lab2/)
+3. [Задание](./docs/dcsft-lab3.pdf), [код](./lab3/)
