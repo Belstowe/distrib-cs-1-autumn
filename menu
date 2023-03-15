@@ -28,7 +28,7 @@ function prompt_packing_algo() {
         case $ans in
             1 ) echo "nfdh"; break;;
             2 ) echo "ffdh"; break;;
-            * ) >&2 echo -e "\nНужно выбрать элемент меню (1, 2, 3).";;
+            * ) >&2 echo -e "\nНужно выбрать элемент меню (1, 2).";;
         esac
     done
     >&2 echo
@@ -53,7 +53,7 @@ function prompt_epsilon() {
 }
 
 function prompt_yes_no() {
-    >&2 echo -e "$1 ([Дд]а/[Нн]ет/[Yy]es/[Nn]o)"
+    >&2 echo -n -e "$1 ([Дд]а/[Нн]ет/[Yy]es/[Nn]o) "
     while true; do
         read -n1 -r ans
         case $ans in
